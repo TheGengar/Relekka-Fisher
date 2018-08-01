@@ -32,8 +32,14 @@ public class MuleFish implements Node
                 Camera.turnToTile(mules[0].getPosition());
                 WebWalking.walkTo(mules[0].getPosition());
             }
-            mules[0].click("Trade with " + Vars.muleName);
-            System.out.println("muleShark ~~ Traded with mule, waiting for response.");
+
+            if (!mules[0].click("Trade with " + Vars.muleName))
+            {
+                System.out.println("muleShark ~~ Failed to trade mule " + Vars.muleName);
+                return;
+            }
+
+            System.out.println("muleShark ~~ Traded with mule" + Vars.muleName + ", waiting for response.");
 
             // Now must wait for the trade screen to pop-up (i.e. Trading begin).
             if (isTradeScreenOpen(Trading.WINDOW_STATE.FIRST_WINDOW))
@@ -41,24 +47,15 @@ public class MuleFish implements Node
                 System.out.println("muleShark ~~ First trade window opened, offering sharks.");
                 // Offer all the fish. 0 means offer all.
 
-                // Ensures both shrimp and anchovies are offered
                 if (Vars.fishingEquipmentID == Constants.FISHING_NET_ID)
                 {
-                    if(Timing.waitCondition(new Condition() {
-                        @Override
-                        public boolean active()
-                        {
-                            General.sleep(100);
-                            return Trading.offer(0, Vars.fishID[0]);
-                        }
-                    }, General.random(5000, 5100)))
-                    {
-                        do
-                        {
-                            Trading.offer(0, Vars.fishID[1]);
-                        }
-                        while (Inventory.find(Vars.fishID[1]).length > 0);
-                    }
+                    Trading.offer(0, Vars.fishID[0]);
+                    General.sleep(1400);
+                    Trading.offer(0, Vars.fishID[1]);
+                }
+                else
+                {
+                    Trading.offer(0, Vars.fishID);
                 }
 
                 // Items are offered.

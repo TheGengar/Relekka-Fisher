@@ -24,7 +24,7 @@ public class WalkToFishingSpot implements Node {
     @Override
     public boolean validate()
     {
-        return  (Inventory.find(Vars.fishingEquipmentID).length > 0     &&
+        return  (Inventory.find(Vars.fishID).length < 15                &&
                  !Vars.isPkerDetected                                   &&
                  !Inventory.isFull()                                    &&
                  Player.getPosition().distanceTo(Vars.fishingTile) > 4);
